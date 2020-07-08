@@ -13,7 +13,7 @@ function CardWrapper({data}) {
       return (    
                 <Col span={5} key={el.id}>
                     <li style={{ listStyle:'none' }}>
-                        <Cards item={el} />
+                        <Cards item={el}/>
                     </li>
                 </Col>
             )

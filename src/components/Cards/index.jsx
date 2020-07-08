@@ -1,14 +1,14 @@
 import React , {useState} from 'react';
+import {connect} from 'react-redux';
 import { Card } from 'antd';
 import {
-  BrowserRouter as Router,
   Link
 } from "react-router-dom";
 import ReactCardFlip from 'react-card-flip';
 
 const { Meta } = Card;
 
-function Cards({item}) {
+function Cards({item, itemDetail}) {
     const [value, setFlipSide] = useState(false);
 
     const onClickFlip = () => {
@@ -23,7 +23,7 @@ function Cards({item}) {
         onClick={onClickFlip}>
         
           <Link to="/details">
-            <Meta title={item.name} description="some" />
+            <Meta title={item.name} description="some" onClick={()=>{itemDetail(item)}}/>
           </Link>
         
       </Card> 
@@ -40,7 +40,13 @@ function Cards({item}) {
     
     )
   };
-  export default Cards;
+    const mapDispatchToProps = (dispatch) => {
+    return{
+      itemDetail: (item) => dispatch({type:'CLICKNAME', item})
+    }
+  };
+  
+  export default connect(null,mapDispatchToProps)(Cards);
   
   
   

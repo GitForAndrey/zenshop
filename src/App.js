@@ -12,12 +12,16 @@ import Basket from './pages/Basket';
 
 
 function App() {
-  
+   
   return (
     <Router>
       <Switch>
-        <Route path="/" component={ProductsList} exact />
-        <Route path="/details" component={ProductDetails} />
+        <Route path="/" exact >
+          <ProductsList />
+        </Route>
+        <Route path="/details">
+          <ProductDetails/>
+        </Route>
         <Route path="/basket" component={Basket} />
       </Switch>
     </Router>

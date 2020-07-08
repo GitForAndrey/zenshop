@@ -97,7 +97,7 @@ const Basket = () => {
         <List
             size="small"
             header={<div>Корзина</div>}
-    footer={<div>Общая стоимость: {allCost}</div>}
+            footer={<div>Общая стоимость: {allCost}</div>}
             bordered
             dataSource={dataArray}
             renderItem={item => <List.Item><BasketItem item={item} onChangeQuantiti={onChangeQuantiti} ondeleteItem={deleteItem}/></List.Item>}
