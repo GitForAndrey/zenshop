@@ -1,86 +1,35 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react';
+import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux'
+import * as actions from '../../Redux/Actions/actions_basket';
 import { List, Layout, Menu, Row, Col } from 'antd';
 import {
     Link
   } from "react-router-dom";
-  import BasketItem from '../../components/BasketItem'
+import BasketItem from '../../components/BasketItem';
+
 
 const { Header, Footer, Content } = Layout;
 
-
-const data = [
-  {
-    id:1,
-    price: 5400,
-    quantity:1,
-    name: "Квадракоптер GS-3",
-    image:"http://i.piccy.info/i9/e7dd4e7234f090d699d4c622df8decf8/1593116024/69030/1385260/oc_93product_Kvadrokopter_DJI_Mavic_2_Pro_283da55c4daf24bd2a167cc4eac27f71_1000x1000.jpg"
-  },
-  {
-    id:2,
-    price: 600,
-    quantity:2,
-    name: "Наушники R2-pro",
-    image:"http://i.piccy.info/i9/4e22360dac10861a9a87382a00d01f57/1593116089/42728/1385260/besprovodnye_naushniki_xiaomi_redmi_airdots_zbw4480gl_17941920765049.jpg"
+const Basket = ({data, DELETE_ITEM, QUANTITY_ITEM}) => {
   
-  },
-  {
-    id:3,
-    price: 4000000,
-    quantity:1,
-    name: "Вертолет SP-roket 23G5",
-    image:"http://i.piccy.info/i9/e122931d8888c84206b7c43ee77c2594/1593116171/42111/1385260/unnamed.jpg"
-  
-  }
-    
-  ];
-  
-
-const Basket = () => {
   const [allCost, changeCost] = useState(0);
-  const [dataArray, chengeData] = useState(data);
+  
 
-  useEffect(() => {
+useEffect(() => {
+  calculateCost(data);
+}, [data]);
+
+const calculateCost = (arr) =>{
     let sum = 0;
-      for (const item of data) {
-        sum += item.price*item.quantity;
-        }
-    changeCost(sum);
-}, []);
-
-    const calculateCost = (arr) =>{
-        let sum = 0;
-        for (const item of arr){
-          sum += item.price*item.quantity;
-        }
-        changeCost(sum)
+    for (const item of arr){
+      sum += item.price*item.quantity;
     }
-    const deleteItem = ({item}) => {
-      
-      console.log(item)
-      let itemIndex = dataArray.indexOf(item);
-      console.log(itemIndex, dataArray)
-      dataArray.splice(itemIndex, 1);
-      chengeData((dataArray)=> {
-        return dataArray
-      });
-      
-      calculateCost(dataArray);
-    }
-    const onChangeQuantiti = (quantity,item) => {
-      let changeArr = dataArray.slice();
-      let findItem =  changeArr.find( (el) => el.id === item.id);
-      let itemIndex = changeArr.indexOf(findItem);
-      let newItem = {...item, quantity:quantity};
-      changeArr.splice(itemIndex, 1, newItem);
-      chengeData((dataArray)=> {
-        return changeArr
-      });
-      calculateCost(changeArr);
-      
-      
-    }
-    
+    changeCost((allCost)=> {
+      return sum
+    });
+}
+  
     return (
       
         <Layout style={{minHeight:'100vh'}}>
@@ -94,14 +43,20 @@ const Basket = () => {
       <Content>
       <Row justify="center" align="center">
         <Col span={12}>
-        <List
-            size="small"
-            header={<div>Корзина</div>}
-            footer={<div>Общая стоимость: {allCost}</div>}
-            bordered
-            dataSource={dataArray}
-            renderItem={item => <List.Item><BasketItem item={item} onChangeQuantiti={onChangeQuantiti} ondeleteItem={deleteItem}/></List.Item>}
-            />
+          <List
+              size="small"
+              header={<div>Корзина</div>}
+              footer={<div>Общая стоимость: {allCost}</div>}
+              bordered
+              dataSource={data}
+              renderItem={item =>
+                <List.Item>
+                    <BasketItem 
+                    item={item}
+                    quantityItem={QUANTITY_ITEM} 
+                    deleteItem={DELETE_ITEM}/>
+                </List.Item>}
+          />
         </Col>
       </Row>
       </Content>
@@ -110,5 +65,16 @@ const Basket = () => {
        
     )
 }
-
-export default Basket;
+const mapStateToProps = (store) => {
+  return{
+    data: store.basketItem.basketItem,
+  }
+};
+  const mapDispatchToProps = (dispatch) => {
+    const {DELETE_ITEM, QUANTITY_ITEM} = bindActionCreators(actions, dispatch);
+  return{
+    DELETE_ITEM,
+    QUANTITY_ITEM,
+  }
+};
+export default connect(mapStateToProps,mapDispatchToProps )(Basket);

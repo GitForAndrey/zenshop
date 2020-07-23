@@ -1,8 +1,9 @@
 import {combineReducers} from 'redux';
 import products from './products';
+import basketItem from './basket';
 
 const appRedux = combineReducers ({
-    products 
+    products, basketItem
 })
 
 const reducer = (state , action) => {

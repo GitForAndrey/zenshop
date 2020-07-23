@@ -5,10 +5,11 @@ import {
   Link
 } from "react-router-dom";
 import ReactCardFlip from 'react-card-flip';
+import * as actions from '../../Redux/Actions/actions';
 
 const { Meta } = Card;
 
-function Cards({item, itemDetail}) {
+function Cards({item, SELECTED}) {
     const [value, setFlipSide] = useState(false);
 
     const onClickFlip = () => {
@@ -23,7 +24,7 @@ function Cards({item, itemDetail}) {
         onClick={onClickFlip}>
         
           <Link to="/details">
-            <Meta title={item.name} description="some" onClick={()=>{itemDetail(item)}}/>
+            <Meta title={item.name} description="some" onClick={()=>{SELECTED(item)}}/>
           </Link>
         
       </Card> 
@@ -40,13 +41,15 @@ function Cards({item, itemDetail}) {
     
     )
   };
-    const mapDispatchToProps = (dispatch) => {
-    return{
-      itemDetail: (item) => dispatch({type:'CLICKNAME', item})
-    }
-  };
+
+  //   const mapDispatchToProps = (dispatch) => {
+  //     const {SELECTED} = bindActionCreators(actions, dispatch);
+  //   return{
+  //     SELECTED,
+  //   }
+  // };
   
-  export default connect(null,mapDispatchToProps)(Cards);
+  export default connect(null,actions)(Cards);
   
   
   

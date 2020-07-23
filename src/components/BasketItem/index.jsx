@@ -2,21 +2,19 @@ import React, {useState, useEffect} from 'react';
 import { InputNumber, Button, Tooltip } from 'antd';
 import {Title, Img, Price, ItemContainer} from './style';
 
-const BasketItem = ({item, onChangeQuantiti, ondeleteItem}) => {
-
-      
-    const [cost, changeCost] = useState(item.price);
-    const [quantity, changeItemQuantity] = useState(item.quantity);
+const BasketItem = ({item, quantityItem, deleteItem}) => {
+    
+    const [cost, changeCost] = useState(0);
+     
    
     useEffect(() => {
         changeCost((cost) => {
             return (item.quantity*item.price);
         });
-    }, [item.quantity]);
+    }, [item]);
 
     const onChange = (value) => {
-        onChangeQuantiti(value,item);
-
+        quantityItem(value,item);
         changeCost((cost) => {
             return (value*item.price);
         });
@@ -32,9 +30,9 @@ const BasketItem = ({item, onChangeQuantiti, ondeleteItem}) => {
              />
             <Title>{item.name}</Title>
             <Price> {cost} usd</Price>
-            <InputNumber min={1} defaultValue={item.quantity} onChange={onChange} />
+            <InputNumber min={1} value={item.quantity} onChange={onChange} />
             <Tooltip title="delete">
-                <Button shape="circle" onClick={()=>ondeleteItem({item})}>
+                <Button shape="circle" onClick={()=>deleteItem({item})}>
                     X
                 </Button>
             </Tooltip>

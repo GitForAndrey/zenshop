@@ -19,15 +19,16 @@ const initialState = {
         }
       ],
       selected:{},
+      
 }
 
 const products  = (state = initialState, action) => {
     switch (action.type) {
-        case 'CLICKNAME':
+        case 'SELECTEDITEM':
             return {...state,
               selected: action.item
             };
-
+            
         default:
             return state;
     }
