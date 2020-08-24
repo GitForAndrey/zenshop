@@ -1,36 +1,48 @@
-import React from 'react';
-import {connect} from 'react-redux';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { OPENMODAL, CLOSEMODAL, GETDATA } from '../../Redux/actions';
 import CardWrapper from '../../components/CardWrapper';
-import { Layout, Menu } from 'antd';
-import {
-  Link
-} from "react-router-dom";
+import { Layout } from 'antd';
+import HeaderBlock from '../../components/Header';
+import ModalLog from '../../components/Modal';
+import AlertBlock from '../../components/Alert';
 
-const { Header, Footer, Content } = Layout;
+const { Footer, Content } = Layout;
 
+const ProductsList = ({
+  data,
+  OPENMODAL,
+  CLOSEMODAL,
+  GETDATA,
+  modalShow,
+  login,
+  loading,
+  alert,
+}) => {
+  useEffect(() => {
+    GETDATA();
+  }, []);
 
-const ProductsList = ({data}) => {
-  
   return (
-    <Layout style={{minHeight:'100vh'}}>
-      <Header>
-      <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
-        <Menu.Item key="1"><Link to='/basket'>Главная</Link></Menu.Item>
-        <Menu.Item key="2">nav 2</Menu.Item>
-        <Menu.Item key="3"><Link to='/basket'>Корзина</Link></Menu.Item>
-      </Menu>
-      </Header>
-      <Content >
-        <CardWrapper data={data}/>
+    <Layout style={{ minHeight: '100vh' }}>
+      <HeaderBlock OPENMODAL={OPENMODAL} login={login} />
+      <Content>
+        {alert && <AlertBlock alert={alert} />}
+        <CardWrapper data={data} loading={loading} />
+        <ModalLog modalShow={modalShow} CLOSEMODAL={CLOSEMODAL}></ModalLog>
       </Content>
       <Footer>Footer</Footer>
     </Layout>
   );
-}
+};
 const mapStateToProps = (store) => {
-  return{
+  return {
+    login: store.login.login,
     data: store.products.products,
-  }
+    modalShow: store.login.showModal,
+    loading: store.products.loading,
+    alert: store.products.alert,
+  };
 };
 
-export default connect(mapStateToProps)(ProductsList);
+export default connect(mapStateToProps, { OPENMODAL, CLOSEMODAL, GETDATA })(ProductsList);
