@@ -37,11 +37,18 @@ const basketItem = (state = initialState, action) => {
 
     case QUANTITY_ITEM_TP:
       const { item, value } = action.payload;
-      let data = state.basketItem.slice();
-      let itemIndex = data.indexOf(item);
-      let newItem = { ...item, quantity: value };
-      data.splice(itemIndex, 1, newItem);
-      return { ...state, basketItem: data };
+      return {
+        ...state,
+        basketItem: state.basketItem.map((item1) => {
+          if (item1.id === item.id) {
+            return {
+              ...item,
+              quantity: value,
+            };
+          }
+          return item1;
+        }),
+      };
 
     default:
       return state;
