@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { DELETE_ITEM, QUANTITY_ITEM } from '../../Redux/actions';
-import { List, Layout, Menu, Row, Col } from 'antd';
-import { Link } from 'react-router-dom';
+import { DELETE_ITEM, QUANTITY_ITEM } from '../../Redux/Actions/basket';
+import { OPENMODAL, LOGOUT } from '../../Redux/Actions/authorization';
+import { List, Layout, Row, Col } from 'antd';
+import HeaderContainer from '../../components/HeaderContainer';
 import BasketItem from '../../components/BasketItem';
 
 const { Header, Footer, Content } = Layout;
 
-const Basket = ({ data, DELETE_ITEM, QUANTITY_ITEM }) => {
+const Basket = ({
+  wishlist,
+  DELETE_ITEM,
+  QUANTITY_ITEM,
+  login,
+  user,
+  OPENMODAL,
+  LOGOUT,
+  basketItem,
+}) => {
   const [allCost, changeCost] = useState(0);
 
   useEffect(() => {
-    calculateCost(data);
-  }, [data]);
+    calculateCost(basketItem);
+  }, [basketItem]);
 
   const calculateCost = (arr) => {
     let sum = 0;
@@ -27,14 +37,15 @@ const Basket = ({ data, DELETE_ITEM, QUANTITY_ITEM }) => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header>
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-          <Menu.Item key="1">
-            <Link to="/">Главная</Link>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <Link to="/basket">Корзина</Link>
-          </Menu.Item>
-        </Menu>
+        <HeaderContainer
+          OPENMODAL={OPENMODAL}
+          LOGOUT={LOGOUT}
+          login={login}
+          user={user}
+          selectedKeys={'2'}
+          wishlist={wishlist}
+          basketItem={basketItem}
+        />
       </Header>
       <Content>
         <Row justify="center" align="center">
@@ -44,7 +55,7 @@ const Basket = ({ data, DELETE_ITEM, QUANTITY_ITEM }) => {
               header={<div>Корзина</div>}
               footer={<div>Общая стоимость: {allCost}</div>}
               bordered
-              dataSource={data}
+              dataSource={basketItem}
               renderItem={(item) => (
                 <List.Item>
                   <BasketItem item={item} QUANTITY_ITEM={QUANTITY_ITEM} DELETE_ITEM={DELETE_ITEM} />
@@ -60,7 +71,10 @@ const Basket = ({ data, DELETE_ITEM, QUANTITY_ITEM }) => {
 };
 const mapStateToProps = (store) => {
   return {
-    data: store.basketItem.basketItem,
+    login: store.login.login,
+    user: store.login.user,
+    wishlist: store.wishlist.wishListArr,
+    basketItem: store.basketItem.basketItem,
   };
 };
-export default connect(mapStateToProps, { DELETE_ITEM, QUANTITY_ITEM })(Basket);
+export default connect(mapStateToProps, { DELETE_ITEM, QUANTITY_ITEM, OPENMODAL, LOGOUT })(Basket);

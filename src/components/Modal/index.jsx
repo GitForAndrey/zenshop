@@ -1,27 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal } from 'antd';
 import NormalLoginForm from '../LogInForm';
 import RegistrationForm from '../RegisterForm';
 
-const ModalLog = ({ modalShow, CLOSEMODAL }) => {
-  const [form, changeForm] = useState(true);
-
-  const onLinkClick = (arg, e) => {
-    e.preventDefault();
-    changeForm(arg);
-  };
+const ModalLog = ({
+  modalShow,
+  CLOSEMODAL,
+  SIGNUP,
+  CHANGEFORM,
+  LOGIN,
+  LOGOUT,
+  alertForm,
+  button,
+  whatForm,
+}) => {
   return (
     <>
       <Modal
-        title={form ? 'Вход' : 'Регистрация'}
+        title={whatForm ? 'Вход' : 'Регистрация'}
         centered
         visible={modalShow}
         onCancel={() => CLOSEMODAL()}
         footer={null}>
-        {form ? (
-          <NormalLoginForm onLinkClick={onLinkClick} />
+        {whatForm ? (
+          <NormalLoginForm
+            CHANGEFORM={CHANGEFORM}
+            LOGIN={LOGIN}
+            LOGOUT={LOGOUT}
+            alertForm={alertForm}
+          />
         ) : (
-          <RegistrationForm onLinkClick={onLinkClick} />
+          <RegistrationForm
+            CHANGEFORM={CHANGEFORM}
+            SIGNUP={SIGNUP}
+            alertForm={alertForm}
+            button={button}
+          />
         )}
       </Modal>
     </>

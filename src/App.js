@@ -1,28 +1,28 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import './App.css';
-import ProductsList from './pages/ProductsList';
-import ProductDetails from './pages/ProductDetails';
+import ProductsList from './pages/Main';
+import ProductDetails from './pages/ItemPage';
 import Basket from './pages/Basket';
-
+import WishList from './pages/WishList';
 
 function App() {
-   
   return (
     <Router>
       <Switch>
-        <Route path="/" exact >
+        <Route path="/" exact>
           <ProductsList />
         </Route>
         <Route path="/details">
-          <ProductDetails/>
+          <ProductDetails />
         </Route>
-        <Route path="/basket" component={Basket} />
+        <Route path="/basket">
+          <Basket />
+        </Route>
+        <Route path="/wishlist">
+          <WishList />
+        </Route>
       </Switch>
     </Router>
   );

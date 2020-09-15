@@ -1,10 +1,11 @@
 import React from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import AlertInForm from '../AlertInForm';
 
-const NormalLoginForm = ({ onLinkClick }) => {
-  const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+const NormalLoginForm = ({ CHANGEFORM, LOGIN, LOGOUT, alertForm }) => {
+  const onFinish = ({ useremail, password }) => {
+    LOGIN(useremail, password);
   };
 
   return (
@@ -13,10 +14,11 @@ const NormalLoginForm = ({ onLinkClick }) => {
       className="login-form"
       initialValues={{ remember: true }}
       onFinish={onFinish}>
+      {alertForm && <AlertInForm alertForm={alertForm} />}
       <Form.Item
-        name="username"
-        rules={[{ required: true, message: 'Пожайлуста, введите имя пользователя!' }]}>
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+        name="useremail"
+        rules={[{ required: true, message: 'Пожайлуста, введите почтовый ящик!' }]}>
+        <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="E-mail" />
       </Form.Item>
       <Form.Item
         name="password"
@@ -32,7 +34,7 @@ const NormalLoginForm = ({ onLinkClick }) => {
           <Checkbox>Remember me</Checkbox>
         </Form.Item>
 
-        <a className="login-form-forgot" href="">
+        <a className="login-form-forgot" onClick={() => LOGOUT()}>
           Forgot password
         </a>
       </Form.Item>
@@ -41,7 +43,7 @@ const NormalLoginForm = ({ onLinkClick }) => {
         <Button type="primary" htmlType="submit" className="login-form-button">
           Войти
         </Button>
-        или <a onClick={(e) => onLinkClick(false, e)}>Зарегестрироваться!</a>
+        или <a onClick={() => CHANGEFORM()}>Зарегестрироваться!</a>
       </Form.Item>
     </Form>
   );

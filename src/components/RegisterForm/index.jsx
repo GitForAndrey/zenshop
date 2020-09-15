@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input, Tooltip, Checkbox, Button } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import AlertInForm from '../AlertInForm';
 
 const formItemLayout = {
   labelCol: {
@@ -25,15 +26,17 @@ const tailFormItemLayout = {
   },
 };
 
-const RegistrationForm = ({ onLinkClick }) => {
+const RegistrationForm = ({ CHANGEFORM, SIGNUP, alertForm, button }) => {
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+  const onFinish = ({ email, password, nickname }) => {
+    console.log('Received values of form:', email, password);
+    SIGNUP(email, password, nickname);
   };
 
   return (
     <Form {...formItemLayout} form={form} name="register" onFinish={onFinish} scrollToFirstError>
+      {alertForm && <AlertInForm alertForm={alertForm} />}
       <Form.Item
         name="email"
         label="E-mail"
@@ -114,10 +117,10 @@ const RegistrationForm = ({ onLinkClick }) => {
         </Checkbox>
       </Form.Item>
       <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" disabled={button}>
           Register
         </Button>
-        или <a onClick={(e) => onLinkClick(true, e)}>Уже есть аккаунт!</a>
+        или <a onClick={() => CHANGEFORM()}>Уже есть аккаунт!</a>
       </Form.Item>
     </Form>
   );

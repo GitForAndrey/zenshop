@@ -1,6 +1,6 @@
-import app from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/auth';
-import 'firebase/firebase-firestore';
+import 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -12,26 +12,27 @@ const firebaseConfig = {
   messagingSenderId: '358386541424',
   appId: '1:358386541424:web:0c791f7d60b5b25a92a5b5',
 };
+firebase.initializeApp(firebaseConfig);
 
-class Firebase {
-  constructor() {
-    app.initializeApp(firebaseConfig);
-    this.auth = app.auth();
-    this.db = auth.firestore();
-  }
-  logIn(email, password) {
-    return this.auth.signInWithEmailAndPassword(email, password);
-  }
-  logOut() {
-    return this.auth.signOut();
-  }
+// class Firebase {
+//   constructor() {
+//     app.initializeApp(firebaseConfig);
+//     this.auth = app.auth();
+//     this.db = auth.firestore();
+//   }
+//   logIn(email, password) {
+//     return this.auth.signInWithEmailAndPassword(email, password);
+//   }
+//   logOut() {
+//     return this.auth.signOut();
+//   }
 
-  async register(name, email, password) {
-    await this.auth.createUserWithEmailAndPassword(email, password);
-    return this.auth.currentUser.updateProfile({
-      showNAme: name,
-    });
-  }
-}
+//   async register(name, email, password) {
+//     await this.auth.createUserWithEmailAndPassword(email, password);
+//     return this.auth.currentUser.updateProfile({
+//       showNAme: name,
+//     });
+//   }
+// }
 
-export default new Firebase();
+export default firebase;
